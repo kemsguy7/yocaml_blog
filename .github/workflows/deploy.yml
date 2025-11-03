@@ -31,6 +31,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          opam install yocaml.2.0.1 yocaml_unix.2.0.1 yocaml_yaml.2.0.1 yocaml_markdown.2.0.1 yocaml_jingoo.2.0.1 yocaml_syndication.2.0.1 --yes
           opam install . --deps-only --yes
           eval $(opam env)
 
