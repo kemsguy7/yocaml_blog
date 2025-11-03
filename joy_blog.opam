@@ -3,18 +3,23 @@ opam-version: "2.0"
 version: "0.1.0"
 synopsis: "Joy's Beautiful Apple-themed Blog"
 description: "A static blog generated with YOCaml"
+maintainer: ["kemsguy7@github.com"]
+authors: ["Kemsguy7"]
+license: "MIT"
+homepage: "https://github.com/kemsguy7/yocaml_blog"
+bug-reports: "https://github.com/kemsguy7/yocaml_blog/issues"
 depends: [
   "dune" {>= "3.0"}
   "ocaml" {>= "5.3.0"}
   "yocaml" {>= "2.5.0"}
   "yocaml_unix" {>= "2.5.0"}
-  "cmarkit"
-  "hilite"
-  "ocamlformat"
-  "yocaml_markdown" {= "2.5.0"}
   "yocaml_yaml" {>= "2.5.0"}
   "yocaml_jingoo" {>= "2.5.0"}
-  "yocaml_syndication" {>= "2.0.0"}
+  "yocaml_syndication" {>= "2.5.0"}
+  "yocaml_markdown" {= "2.5.0"}
+  "cmarkit" {>= "0.3.0"}
+  "hilite" {>= "0.5.0"}
+  "ocamlformat" {with-dev-setup}
   "odoc" {with-doc}
 ]
 build: [
@@ -31,3 +36,4 @@ build: [
     "@doc" {with-doc}
   ]
 ]
+dev-repo: "git+https://github.com/kemsguy7/yocaml_blog.git"
