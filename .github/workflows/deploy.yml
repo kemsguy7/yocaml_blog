@@ -4,20 +4,8 @@ on:
   push:
     branches: [main]
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
-
 jobs:
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -26,28 +14,21 @@ jobs:
       - name: Setup OCaml
         uses: ocaml/setup-ocaml@v3
         with:
-          ocaml-compiler: 5.3.0
+          ocaml-compiler: "5.3.0"
           dune-cache: true
 
       - name: Install dependencies
-        run: |
-          opam install hilite --yes
-          opam install . --deps-only --yes
-          eval $(opam env)
+        run: opam install . --deps-only
 
-      - name: Build site
-        run: |
-          eval $(opam env)
-          dune exec joy_blog
+      - name: Build project
+        run: opam exec -- dune build --profile=release
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: "./_www"
+      - name: Generate site
+        run: opam exec -- dune exec joy_blog
 
       - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_www
+          publish_branch: gh-pages
