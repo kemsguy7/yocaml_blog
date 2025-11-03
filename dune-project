@@ -1,27 +1,37 @@
-(lang dune 3.0)
-(name joy_blog)
-(version 0.1.0)
-(generate_opam_files true)
+name: Deploy to GitHub Pages
 
-(source (github kemsguy7/yocaml_blog))
-(license MIT)
-(authors "Kemsguy7")
-(maintainers "kemsguy7@github.com")
+on:
+  push:
+    branches: [main]
 
-(package
- (name joy_blog)
- (synopsis "Joy's Beautiful Apple-themed Blog")
- (description "A static blog generated with YOCaml")
- (depends
-  (ocaml (>= 5.3.0))
-  (yocaml (>= 2.5.0))
-  (yocaml_unix (>= 2.5.0))
-  (yocaml_yaml (>= 2.5.0))
-  (yocaml_jingoo (>= 2.5.0))
-  (yocaml_syndication (>= 2.5.0))
-  (yocaml_markdown (= 2.5.0))
-  (cmarkit (>= 0.3.0))
-  (hilite (>= 0.5.0))
-  (ocamlformat :with-dev-setup)))
-
-
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup OCaml
+        uses: ocaml/setup-ocaml@v3
+        with:
+          ocaml-compiler: "5.3.0"
+          dune-cache: true
+      
+      - name: Install hilite first (workaround for yocaml_markdown bug)
+        run: opam install hilite --yes
+      
+      - name: Install dependencies
+        run: opam install . --deps-only --yes
+      
+      - name: Build project
+        run: opam exec -- dune build --profile=release
+      
+      - name: Generate site
+        run: opam exec -- dune exec joy_blog
+      
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_www
+          publish_branch: gh-pages
