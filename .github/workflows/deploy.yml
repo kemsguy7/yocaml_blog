@@ -15,6 +15,9 @@ concurrency:
 
 jobs:
   deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -25,19 +28,15 @@ jobs:
         with:
           ocaml-compiler: "5.3.0"
           dune-cache: true
-          opam-depext-flags: --with-test
       
       - name: Install dependencies
         run: |
-          opam update
-          opam install yocaml yocaml_unix yocaml_yaml yocaml_markdown yocaml_jingoo yocaml_syndication --yes
-          opam install . --deps-only --with-doc --with-test
+          opam install . --deps-only --yes
           eval $(opam env)
       
       - name: Build site
         run: |
           eval $(opam env)
-          dune build --profile=release
           dune exec joy_blog
       
       - name: Setup Pages
