@@ -142,14 +142,14 @@ let create_index =
 module Feed = struct
   let path = "atom.xml"
   let title = "Joy's Beautiful Apple-themed Blog"
-  let site_url = "https://yourusername.github.io"
+  let site_url = "https://kemsguy7.github.io/yocaml_blog"
   let feed_description = "My personal blog using YOCaml"
   
   let owner = 
     Yocaml_syndication.Person.make 
       ~uri:site_url 
-      ~email:"your@email.com" 
-      "Your Name"
+      ~email:"mattidungafa@gmail.com" 
+      "Matthew Idungafa"
       
   let authors = Nel.singleton owner
 let article_to_entry (url, article) =
@@ -216,7 +216,7 @@ let program () =
   >>= create_index
   >>= create_feed
   >>= Action.store_cache cache
-  
+
 let () =
   match Sys.argv.(1) with
   | "server" -> 
