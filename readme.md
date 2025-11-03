@@ -1,60 +1,65 @@
 # Joy's Beautiful Apple-themed Blog
 
-A beautiful, modern static blog built with [YOCaml](https://github.com/xhtmlboi/yocaml) - an OCaml static site generator. This blog features Apple-inspired design with smooth animations, Lottie graphics, and a delightful user experience.
+A stunning, modern static blog built with [YOCaml](https://github.com/xhtmlboi/yocaml) - featuring Apple-inspired design with smooth animations, Lottie graphics, and an exceptional user experience.
+
+🌐 **Live Site**: [https://kemsguy7.github.io/yocaml_blog](https://kemsguy7.github.io/yocaml_blog)
 
 ![Blog Preview](https://img.shields.io/badge/OCaml-5.3.0-orange) ![YOCaml](https://img.shields.io/badge/YOCaml-2.5.0-blue) ![License](https://img.shields.io/badge/license-MIT-green)
 
 ## ✨ Features
 
-- 🎨 **Apple-inspired Design** - Clean, modern UI with glassmorphism effects
-- ✨ **Lottie Animations** - Smooth, engaging animations throughout
-- 📱 **Fully Responsive** - Beautiful on all devices
+- 🎨 **Apple-inspired Design** - Clean, modern UI with glassmorphism and blur effects
+- ✨ **Lottie Animations** - Smooth, engaging animations throughout the site
+- 📱 **Fully Responsive** - Beautiful on desktop, tablet, and mobile
 - 🚀 **Lightning Fast** - Static site generation for optimal performance
 - 📝 **Markdown Support** - Write content in Markdown with YAML frontmatter
 - 🏷️ **Tag System** - Organize articles with tags
-- 📰 **RSS Feed** - ATOM feed for syndication
+- 📰 **ATOM Feed** - RSS/ATOM feed for syndication
 - 🎯 **SEO Optimized** - Semantic HTML and meta tags
 - 🌈 **Smooth Scrolling** - Delightful navigation experience
 
 ## 📁 Project Structure
 
 ```
-last_blog/
-├── _build/                 # Dune build artifacts (generated)
-├── _opam/                  # Local opam switch
-├── _www/                   # Generated site output (generated)
-│   ├── .cache             # YOCaml cache
-│   ├── articles/          # Generated article HTML files
-│   ├── images/            # Copied images
-│   ├── style.css          # Concatenated CSS
-│   ├── atom.xml           # RSS/ATOM feed
-│   ├── index.html         # Homepage
-│   ├── about.html         # About page
-│   └── contact.html       # Contact page
+yocaml_blog/
+├── .github/
+│   └── workflows/
+│       └── deploy.yml          # GitHub Actions deployment
+├── _build/                     # Build artifacts (git-ignored)
+├── _opam/                      # Local opam switch (git-ignored)
+├── _www/                       # Generated site (git-ignored)
+│   ├── articles/              # Generated article pages
+│   ├── images/                # Copied images
+│   ├── style.css              # Concatenated CSS
+│   ├── atom.xml               # RSS/ATOM feed
+│   ├── index.html             # Homepage
+│   ├── about.html             # About page
+│   └── contact.html           # Contact page
 ├── assets/
 │   ├── css/
-│   │   ├── reset.css      # CSS reset
-│   │   └── style.css      # Main stylesheet
+│   │   ├── reset.css          # CSS reset
+│   │   └── style.css          # Main stylesheet
 │   ├── images/
-│   │   └── icons.svg      # Icon assets
+│   │   └── icons.svg          # SVG icons
 │   └── templates/
-│       ├── layout.html    # Base layout template
-│       ├── page.html      # Page template
-│       ├── article.html   # Article template
-│       └── index.html     # Homepage template
+│       ├── layout.html        # Base layout
+│       ├── page.html          # Page template
+│       ├── article.html       # Article template
+│       └── index.html         # Homepage template
 ├── bin/
-│   ├── dune               # Executable configuration
-│   └── joy_blog.ml        # Main generator code
+│   ├── dune                   # Executable configuration
+│   └── joy_blog.ml            # Main generator
 ├── content/
-│   ├── articles/          # Article markdown files
+│   ├── articles/              # Article markdown files
 │   │   └── my-first-article.md
-│   ├── pages/             # Page markdown files
+│   ├── pages/                 # Page markdown files
 │   │   ├── about.md
 │   │   └── contact.md
-│   └── index.md           # Homepage content
-├── dune-project           # Dune project configuration
-├── joy_blog.opam          # OPAM package file (generated)
-└── README.md              # This file
+│   └── index.md               # Homepage content
+├── .gitignore                 # Git ignore rules
+├── dune-project               # Dune project config
+├── joy_blog.opam              # OPAM package (auto-generated)
+└── README.md                  # This file
 ```
 
 ## 🚀 Quick Start
@@ -65,245 +70,331 @@ last_blog/
 - **opam** 2.0 or higher
 - **dune** 3.0 or higher
 
-### Installation
+### Local Development
 
 1. **Clone the repository:**
 
 ```bash
-git clone https://github.com/yourusername/joy-blog.git
-cd joy-blog
+git clone https://github.com/kemsguy7/yocaml_blog.git
+cd yocaml_blog
 ```
 
-2. **Create a local opam switch:**
+2. **Create local opam switch:**
 
 ```bash
-opam switch create . 5.3.0 --deps-only
+opam switch create . 5.3.0
 eval $(opam env)
 ```
 
 3. **Install dependencies:**
 
 ```bash
-dune build
-opam install . --deps-only
+opam install . --deps-only --yes
 ```
 
 4. **Build the blog:**
 
 ```bash
 dune build
+dune exec joy_blog
 ```
 
-5. **Run the development server:**
+5. **View locally:**
+
+Since the YOCaml server has some issues, use Python's HTTP server:
 
 ```bash
-dune exec joy_blog server
+cd _www
+python3 -m http.server 8000
 ```
 
-6. **Visit your blog:**
-   Open your browser and navigate to `http://localhost:8000`
+Then visit: `http://localhost:8000`
+
+### Development Workflow
+
+**When you make changes:**
+
+```bash
+# 1. Rebuild the site
+dune exec joy_blog
+
+# 2. View changes
+cd _www && python3 -m http.server 8000
+```
+
+**Or use watch mode** (requires `entr` or similar):
+
+```bash
+# Install entr (macOS)
+brew install entr
+
+# Auto-rebuild on file changes
+ls bin/*.ml content/**/*.md assets/**/* | entr -r sh -c 'dune exec joy_blog'
+```
 
 ## 📝 Creating Content
 
 ### Writing Articles
 
-Create a new markdown file in `content/articles/`:
+Create `content/articles/my-article.md`:
 
 ```markdown
 ---
 title: My Awesome Article
-description: A brief description of the article
+description: A brief description
 date: 2025-11-03
 tags: [ocaml, functional-programming, yocaml]
 ---
 
 # My Awesome Article
 
-Your content here in **Markdown** format!
+Your **markdown** content here!
 ```
 
-**Required frontmatter fields:**
+**Required fields:**
 
 - `title` - Article title
-- `date` - Publication date (YYYY-MM-DD format)
+- `date` - Publication date (YYYY-MM-DD)
 
-**Optional frontmatter fields:**
+**Optional fields:**
 
-- `description` - Brief article summary
+- `description` - Brief summary
 - `tags` - Array of tags
 
 ### Writing Pages
 
-Create a new markdown file in `content/pages/`:
+Create `content/pages/my-page.md`:
 
 ```markdown
 ---
 page_title: My Page
 description: Page description
-tags: [page, info]
+tags: [info]
 ---
 
 # Page Content
 
-Your page content here!
+Your content here!
 ```
 
-**Optional frontmatter fields:**
+### Updating Homepage
 
-- `page_title` - Page title
-- `description` - Page description
-- `tags` - Array of tags
-
-### Homepage
-
-Edit `content/index.md` to customize your homepage content.
+Edit `content/index.md` to customize your homepage.
 
 ## 🎨 Customization
 
-### Modify Design
+### Colors & Design
 
-Edit `assets/css/style.css` to customize:
+Edit `assets/css/style.css` - customize CSS variables:
 
-- Colors (CSS variables in `:root`)
-- Spacing
-- Border radius
-- Shadows
-- Animations
+```css
+:root {
+  --apple-blue: #007aff;
+  --apple-purple: #af52de;
+  --apple-pink: #ff2d55;
+  /* ... modify colors, spacing, etc. */
+}
+```
 
-### Update Templates
+### Templates
 
-Templates are in `assets/templates/`:
+Templates use [Jingoo](https://github.com/tategakibunko/jingoo) (Jinja2-like):
 
-- `layout.html` - Base layout with navigation and footer
-- `page.html` - Template for regular pages
-- `article.html` - Template for blog articles
-- `index.html` - Homepage template with article list
+- `assets/templates/layout.html` - Navigation & footer
+- `assets/templates/page.html` - Regular pages
+- `assets/templates/article.html` - Blog articles
+- `assets/templates/index.html` - Homepage with article list
 
-Templates use [Jingoo](https://github.com/tategakibunko/jingoo) templating language (similar to Jinja2).
+### Site Information
 
-### Change Site Information
-
-Edit `bin/joy_blog.ml` and update the `Feed` module:
+Update `bin/joy_blog.ml` in the `Feed` module:
 
 ```ocaml
 module Feed = struct
-  let path = "atom.xml"
   let title = "Your Blog Title"
-  let site_url = "https://yourusername.github.io"
-  let feed_description = "Your blog description"
+  let site_url = "https://yourdomain.com"
+  let feed_description = "Your description"
 
   let owner =
     Yocaml_syndication.Person.make
       ~uri:site_url
       ~email:"your@email.com"
       "Your Name"
-  ...
 end
 ```
 
 ## 🚀 Deployment
 
-### GitHub Pages
+### GitHub Pages (Automatic)
 
-1. **Create a GitHub repository** for your blog
+This blog is configured for automatic deployment via GitHub Actions.
 
-2. **Create `.github/workflows/deploy.yml`:**
+**How it works:**
 
-```yaml
-name: Deploy Blog
+1. Push to `main` branch
+2. GitHub Actions builds the site
+3. Deploys to GitHub Pages automatically
+4. Live at: https://kemsguy7.github.io/yocaml_blog
 
-on:
-  push:
-    branches:
-      - main
+**Workflow file:** `.github/workflows/deploy.yml`
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
+### Custom Domain Setup
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+**1. Add CNAME file:**
 
-      - name: Setup OCaml
-        uses: ocaml/setup-ocaml@v2
-        with:
-          ocaml-compiler: 5.3.0
+Create `content/CNAME`:
 
-      - name: Install dependencies
-        run: |
-          opam install . --deps-only
-
-      - name: Build site
-        run: |
-          eval $(opam env)
-          dune build
-          dune exec joy_blog
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_www
-          enable_jekyll: false
+```
+yourdomain.com
 ```
 
-3. **Enable GitHub Pages** in your repository settings:
+**2. Update `bin/joy_blog.ml`:**
 
-   - Go to Settings → Pages
-   - Source: Deploy from a branch
-   - Branch: `gh-pages` / `root`
+Add CNAME copy function:
 
-4. **Push to GitHub:**
+```ocaml
+let copy_cname =
+  let cname_file = Path.(content / "CNAME") in
+  Action.copy_file ~into:www cname_file
+
+let program () =
+  let open Eff in
+  let cache = Path.(www / ".cache") in
+  Action.restore_cache cache
+  >>= copy_images
+  >>= copy_cname
+  >>= create_css
+  >>= create_pages
+  >>= create_articles
+  >>= create_index
+  >>= create_feed
+  >>= Action.store_cache cache
+```
+
+Update site URL:
+
+```ocaml
+module Feed = struct
+  let site_url = "https://yourdomain.com"  (* Your domain *)
+  (* ... *)
+end
+```
+
+**3. Configure DNS** (at your domain registrar):
+
+**For apex domain:**
+
+```
+Type: A, Name: @, Value: 185.199.108.153
+Type: A, Name: @, Value: 185.199.109.153
+Type: A, Name: @, Value: 185.199.110.153
+Type: A, Name: @, Value: 185.199.111.153
+```
+
+**For www subdomain:**
+
+```
+Type: CNAME, Name: www, Value: kemsguy7.github.io
+```
+
+**4. Configure GitHub Pages:**
+
+1. Go to: Settings → Pages
+2. Custom domain: Enter `yourdomain.com`
+3. Wait for DNS to propagate (24-48 hours)
+4. Enable "Enforce HTTPS"
+
+**5. Push changes:**
 
 ```bash
 git add .
-git commit -m "Initial commit"
+git commit -m "Add custom domain"
 git push origin main
 ```
 
-Your blog will be automatically deployed to `https://yourusername.github.io`!
+### Manual Deployment
 
-### Custom Domain
-
-1. Add a `CNAME` file to your `content/` directory with your domain
-2. Update `site_url` in `bin/joy_blog.ml`
-3. Configure your DNS to point to GitHub Pages
-
-## 🛠️ Development Commands
+**Build and deploy manually:**
 
 ```bash
-# Build the project
+# Build
+dune exec joy_blog
+
+# Deploy _www contents to your hosting
+rsync -avz _www/ user@yourserver:/var/www/html/
+```
+
+## 🛠️ Commands Reference
+
+```bash
+# Build project
 dune build
 
-# Run development server (auto-rebuilds on changes)
-dune exec joy_blog server
-
-# Build for production
+# Generate site
 dune exec joy_blog
 
 # Clean build artifacts
 dune clean
 
-# Install dependencies
-opam install . --deps-only
-
 # Update dependencies
 opam update && opam upgrade
+
+# Install new dependency
+opam install package-name
+
+# View locally with Python
+cd _www && python3 -m http.server 8000
 ```
 
 ## 📚 Technology Stack
 
-- **[YOCaml](https://github.com/xhtmlboi/yocaml)** - Static site generator
-- **[OCaml](https://ocaml.org/)** - Programming language
+- **[YOCaml](https://yocaml.github.io/)** - Static site generator
+- **[OCaml](https://ocaml.org/)** 5.3.0 - Programming language
 - **[Dune](https://dune.build/)** - Build system
 - **[Jingoo](https://github.com/tategakibunko/jingoo)** - Template engine
 - **[Cmarkit](https://github.com/dbuenzli/cmarkit)** - Markdown parser
 - **[Lottie](https://lottiefiles.com/)** - Animations
+- **[Inter Font](https://rsms.me/inter/)** - Typography
+
+## 🐛 Troubleshooting
+
+### Server Issues
+
+The YOCaml development server may hang. Use Python instead:
+
+```bash
+dune exec joy_blog  # Build site
+cd _www && python3 -m http.server 8000  # Serve locally
+```
+
+### HTML Escaping in Templates
+
+If you see escaped HTML like `&lt;div&gt;`, add `| safe` filter:
+
+```html
+{{ yocaml_body | safe }}
+```
+
+### GitHub Pages Not Updating
+
+1. Check Actions tab for build errors
+2. Ensure Settings → Pages → Source is "GitHub Actions"
+3. Clear browser cache
+4. Wait a few minutes for deployment
+
+### Build Errors
+
+```bash
+# Clean and rebuild
+dune clean
+dune build
+opam install . --deps-only --yes
+dune exec joy_blog
+```
 
 ## 🤝 Contributing
 
-Contributions are welcome! Feel free to:
+Contributions welcome! Feel free to:
 
 - Report bugs
 - Suggest features
@@ -311,21 +402,21 @@ Contributions are welcome! Feel free to:
 
 ## 📄 License
 
-MIT License - feel free to use this project for your own blog!
+MIT License - use freely for your own blog!
 
 ## 👤 Author
 
 **Joy Aruku**
 
-- GitHub: [@joyaruku](https://github.com/joyaruku)
-- Website: [https://yourusername.github.io](https://yourusername.github.io)
+- GitHub: [@kemsguy7](https://github.com/kemsguy7)
+- Website: [kemsguy7.github.io/yocaml_blog](https://kemsguy7.github.io/yocaml_blog)
 
 ## 🙏 Acknowledgments
 
-- [YOCaml](https://yocaml.github.io/) team for the excellent static site generator
+- [YOCaml](https://yocaml.github.io/) team for the excellent SSG
 - [OCaml](https://ocaml.org/) community
 - Apple for design inspiration
-- [LottieFiles](https://lottiefiles.com/) for beautiful animations
+- [LottieFiles](https://lottiefiles.com/) for animations
 
 ---
 
